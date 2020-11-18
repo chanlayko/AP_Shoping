@@ -17,7 +17,7 @@
 <?php include_once ("header.php"); ?>
 <!-- nvabar include -->
 <?php include_once ("navbar.php"); ?>
-  <!-- Content Wrapper. Contains page content -->
+  <!-- Content Wrapper. Contains page content --> 
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">

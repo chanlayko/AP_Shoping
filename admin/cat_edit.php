@@ -11,7 +11,7 @@
     }
    
     if(isset($_POST['submit'])){
-        if(empty($_POST['name']) || empty($_POST['desc'])){
+        if(empty($_POST['name']) || empty($_POST['desc'])){ 
             if(empty($_POST['name'])){
                 $nameError = "* Name cannot be Null";
             }
@@ -88,7 +88,6 @@
                         <label for="title">Name</label>
                         <input type="text" class="form-control" value="<?php echo escape($result[0]['cat_name']); ?>" id="title" name="name">
                         <p style="color:red"><?php echo empty($contError) ? '' : $contError; ?></p>
-
                     </div>
                     <div class="form-group">
                         <label for="content">Description</label>

@@ -99,7 +99,7 @@
 
                 <div class="card-footer">
                   <input type="submit" class="btn btn-primary" name="submit" value="Submit">
-                  <a href="category.php"><button class="btn btn-primary">Black</button></a>
+                  <a href="category.php"><input type="button" class="btn btn-primary" value="Black"></a>
                 </div>
               </form>
             </div>

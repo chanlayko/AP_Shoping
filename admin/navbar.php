@@ -13,7 +13,15 @@
         $page = end($link_array);
     ?>
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3" method="post" action="<?php echo $page == 'index.php' ? 'index.php':'admin_user.php';?>">
+    <form class="form-inline ml-3" method="post" action="<?php if($page == 'index.php'){
+                echo 'index.php';
+            }elseif($page == 'category.php'){
+                echo 'category.php';
+            }elseif($page == 'user_admin.php'){
+                echo 'user_admin.php';
+            }
+            
+            ?>">
      <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
       <div class="input-group input-group-sm">
         <input class="form-control form-control-navbar" name="search" type="search" placeholder="Search" aria-label="Search">
@@ -78,7 +86,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="admin_user.php" class="nav-link">
+            <a href="user_admin.php" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
               <p>User</p>
             </a>

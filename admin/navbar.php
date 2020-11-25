@@ -13,25 +13,31 @@
         $page = end($link_array);
     ?>
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3" method="post" action="<?php if($page == 'index.php'){
-                echo 'index.php';
-            }elseif($page == 'category.php'){
-                echo 'category.php';
-            }elseif($page == 'user_admin.php'){
-                echo 'user_admin.php';
-            }
-            
-            ?>">
-     <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
-      <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" name="search" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>  
-      </div>
-    </form>
+    <?php
+      if($page != 'order.php' && $page != 'order_detail.php'){
+      ?>
+        <form class="form-inline ml-3" method="post" action="<?php if($page == 'index.php'){
+            echo 'index.php';
+        }elseif($page == 'category.php'){
+            echo 'category.php';
+        }elseif($page == 'user_admin.php'){
+            echo 'user_admin.php';
+        }
+        ?>">
+         <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+          <div class="input-group input-group-sm">
+            <input class="form-control form-control-navbar" name="search" type="search" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+              <button class="btn btn-navbar" type="submit">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>  
+          </div>
+        </form>
+      
+      <?php
+        }
+      ?>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
@@ -71,7 +77,7 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-            <a href="index.php" class="nav-link">
+            <a href="product.php" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Product
@@ -89,6 +95,12 @@
             <a href="user_admin.php" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
               <p>User</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="order.php" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>Order</p>
             </a>
           </li>
         </ul>

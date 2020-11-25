@@ -9,7 +9,7 @@
         
         $sql = "SELECT * FROM users WHERE email=:email";
         $pdostat = $pdo->prepare($sql);
-        $pdostat -> bindValue(":email",$email);
+        $pdostat -> bindValue(":email",$email); 
         $pdostat -> execute();
         $user = $pdostat -> fetch(PDO::FETCH_ASSOC);
         if($user){
@@ -19,7 +19,7 @@
                 $_SESSION['role'] = 1;
                 $_SESSION['logged_in'] = time();
                 
-                header("Location: index.php");
+                header("Location: product.php");
             }
         }
         echo "<script>alert('Incorrect credentials !!')</script>";

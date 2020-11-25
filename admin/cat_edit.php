@@ -33,7 +33,7 @@
                 echo "<script>alert('Sussessfully Updated Categroy');window.location.href='category.php';</script>";
             }
         }
-        
+         
     }
 
     $sql = "SELECT * FROM categories WHERE id=".$_GET['id'];

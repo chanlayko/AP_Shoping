@@ -1,0 +1,14 @@
+.address {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+}
+.pagination .fir {
+    border-right: 1px solid #ff6c00;
+}
+.pagination .las {
+    border-left: 1px solid #ff6c00;
+}
+.single-product img {
+    height: 160px
+}

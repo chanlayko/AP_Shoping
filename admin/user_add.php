@@ -99,9 +99,7 @@
                                 if($adReault){
                                     echo "<script>alert('Sussessfully Your Data');window.location.href='user_admin.php';</script>";
                                   }
-                                
-                            }
-
+                            } 
                         }
                     }
                

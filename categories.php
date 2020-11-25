@@ -4,7 +4,7 @@
 	<header class="header_area sticky-header">
 		<div class="main_menu">
 			<nav class="navbar navbar-expand-lg navbar-light main_box">
-				<div class="container"> 
+				<div class="container">
 					<!-- Brand and toggle get grouped for better mobile display -->
 					<a class="navbar-brand logo_h" href="index.php"><h2>AP Shoping</h2></a>
 					
@@ -15,7 +15,7 @@
 							<li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false">categories</a>
-                                    <ul class="dropdown-menu">
+								<ul class="dropdown-menu">
                                          <?php 
                                             $stat = $pdo -> prepare("SELECT * FROM categories");
                                             $stat -> execute();
@@ -28,7 +28,6 @@
                                             }
                                         ?>
                                     </ul>
-								
 							</li>
 							<li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -60,8 +59,21 @@
 		<div class="container">
 			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
 				<div class="col-first">
-					<h1>Welcome To Online Shop</h1>
-					
+					<h1>Categories Listing Page</h1>
+					<nav class="d-flex align-items-center">
+						<a href="index.php">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="#">categories<span class="lnr lnr-arrow-right"></span></a>
+						<?php 
+                            $stat = $pdo -> prepare("SELECT * FROM products WHERE pro_category_id=".$_GET['id']);
+                            $stat -> execute();
+                            $result = $stat -> fetch(PDO::FETCH_ASSOC);
+        
+                            $catstat = $pdo -> prepare("SELECT * FROM categories WHERE id=".$result['pro_category_id']);
+                            $catstat -> execute();
+                            $catresult = $catstat -> fetch(PDO::FETCH_ASSOC);
+                        ?>
+                        <a href="categories.php"><?php echo $catresult['cat_name'] ?></a>
+					</nav>
 				</div>
 			</div>
 		</div>
@@ -83,12 +95,12 @@
         $offset = ($pageno - 1) * $numOfrecs;
 
         if(empty($_POST['search'])){
-            $pdostat = $pdo -> prepare("SELECT * FROM products ORDER BY pro_id DESC");
+            $pdostat = $pdo -> prepare("SELECT * FROM products WHERE pro_category_id=".$_GET['id']." ORDER BY pro_id DESC");
             $pdostat -> execute();
             $RowResult = $pdostat -> fetchAll();
             $total_pages = ceil(count($RowResult) / $numOfrecs);
 
-            $pdostat = $pdo -> prepare("SELECT * FROM products ORDER BY pro_id DESC LIMIT $offset,$numOfrecs");
+            $pdostat = $pdo -> prepare("SELECT * FROM products WHERE pro_category_id=".$_GET['id']." ORDER BY pro_id DESC LIMIT $offset,$numOfrecs");
             $pdostat -> execute();
             $result = $pdostat -> fetchAll();                        
         }else{

@@ -24,7 +24,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Product listings</h1>
+            <h1 class="m-0 text-dark">Order listings</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -47,59 +47,65 @@
               <div class="card-header">
                 <h5 class="m-0">Featured</h5>
               </div>
-<!--
               <?php 
 
-//                if(!empty($_GET['pageno'])){
-//                    $pageno = $_GET['pageno'];
-//                }else{
-//                    $pageno = 1;
-//                }
-//                $numOfrecs = 5;
-//                $offset = ($pageno - 1) * $numOfrecs;
-//                
-//                if(empty($_POST['search'])){
-//                    $sql = "SELECT * FROM posts ORDER BY id DESC";
-//                    $pdostat = $pdo -> prepare($sql);
-//                    $pdostat -> execute();
-//                    $RowResult = $pdostat -> fetchAll();
-//                    $total_pages = ceil(count($RowResult) / $numOfrecs);
-//
-//                    $sql = "SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numOfrecs";
-//                    $pdostat = $pdo -> prepare($sql);
-//                    $pdostat -> execute();
-//                    $result = $pdostat -> fetchAll();                        
-//                }else{
-//                    $searchkey = $_POST['search'];
-//                    $sql = "SELECT * FROM posts WHERE title LIKE '%$searchkey%' ORDER BY id DESC";
-//                    $pdostat = $pdo -> prepare($sql);
-//                    $pdostat -> execute();
-//                    $RowResult = $pdostat -> fetchAll();
-//                    $total_pages = ceil(count($RowResult) / $numOfrecs);
-//
-//                    $sql = "SELECT * FROM posts WHERE title LIKE '%$searchkey%' ORDER BY id DESC LIMIT $offset,$numOfrecs";
-//                    $pdostat = $pdo -> prepare($sql);
-//                    $pdostat -> execute();
-//                    $result = $pdostat -> fetchAll();
-//                }                 
-                ?>
--->
+                if(!empty($_GET['pageno'])){
+                    $pageno = $_GET['pageno'];
+                }else{
+                    $pageno = 1;
+                }
+                $numOfrecs = 5;
+                $offset = ($pageno - 1) * $numOfrecs;
+                
+                $salStat = $pdo -> prepare("SELECT * FROM sale_orders_detail WHERE salod_id=".$_GET['id']);
+                $salStat -> execute();
+                $salResult = $salStat -> fetchAll();
+                $total_pages = ceil(count($salResult) / $numOfrecs);
+
+                $pdostat = $pdo -> prepare("SELECT * FROM sale_orders_detail WHERE salod_id=".$_GET['id']." LIMIT $offset,$numOfrecs");
+                $pdostat -> execute();
+                $result = $pdostat -> fetchAll();                                      
+
+            ?>
               <div class="card-body">
                    <div class="form-group">
-                       <a href="add.php"><input type="submit" value="New Blog Posts" class="btn btn-success"></a>
-                   </div>
                    <div class="form-group">
+                       <a href="order.php"><input type="button" class="btn btn-default" value="Go Black Order Listings"></a>
+                   </div>
                     <table class="table table-bordered table-striped table-hover">
                         <thead class="text-center">
                             <tr>
                                 <th style="width: 10px">#</th>
-                                <th style="width: 200px">Title</th>
-                                <th>Content</th>
-                                <th colspan="2" style="width: 50px;">Actions</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Order Date</th>
                             </tr>
                         </thead>
-                        <tbody>
-                          
+                        <tbody class="text-center">
+                          <?php 
+
+                                if($result){
+                                    $i = 1;
+                                    foreach($result as $value){
+                                        $pStat = $pdo -> prepare("SELECT * FROM products WHERE pro_id=".$value['salod_product_id']);
+                                        $pStat -> execute();
+                                        $pResult = $pStat -> fetchAll();
+                                    ?>
+                                          <tr>
+                                            <td><?php echo $i; ?></td>
+                                            <td><?php echo escape($pResult[0]['pro_name']); ?></td>
+                                            <td><?php echo escape($value['salod_quarlity']); ?></td>
+                                            <td><?php echo escape(date('Y-m-d',strtotime($value['salod_order_date']))); ?></td>
+                                        </tr>  
+
+                                    <?php
+                                        $i++;
+                                        }
+                                    }
+
+
+
+                            ?>
                            
                         </tbody>
                     </table>
@@ -108,7 +114,6 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer clearfix">
-<!--
                    <nav aria-label="Page naigation example">
                         <ul class="pagination pagination-sm m-0 float-right">
                             <li class="page-item"><a href="?pageno=1" class="page-link">First</a></li>
@@ -122,7 +127,6 @@
                             <li class="page-item"><a href="?pageno=<?php echo $total_pages ?>" class="page-link">Last</a></li>
                         </ul>  
                    </nav>
--->
               </div>
             </div>
           </div>

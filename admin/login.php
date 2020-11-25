@@ -12,7 +12,7 @@
         $pdostat -> bindValue(":email",$email); 
         $pdostat -> execute();
         $user = $pdostat -> fetch(PDO::FETCH_ASSOC);
-        if($user){
+        if($user){ 
             if(password_verify($password,$user['password'])){
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user'] = $user['name'];

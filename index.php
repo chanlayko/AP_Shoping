@@ -1,5 +1,14 @@
 <?php include_once('header.php') ?>
-          
+<?php 
+    if(!empty($_POST['search'])) { 
+        setcookie('search',empty($_POST['search']), time() + (86400 * 30), "/");
+    }else{
+        if(empty($_GET['pageno'])){
+            unset($_COOKIE['search']);
+            setcookie('search', null, -1, '/');
+        }
+    }
+?>          
 <!-- Start Header Area -->
 	<header class="header_area sticky-header">
 		<div class="main_menu">
@@ -21,7 +30,7 @@
                                             $stat -> execute();
                                             $result = $stat -> fetchAll();
 
-                                            foreach($result as $value){
+                                            foreach($result as $value){ 
                                         ?>
                                                 <li class="nav-item"><a class="nav-link" href="categories.php?id=<?php echo escape($value['id']) ?>"><?php echo escape($value['cat_name']); ?></a></li>
                                         <?php
@@ -82,7 +91,7 @@
         $numOfrecs = 6;
         $offset = ($pageno - 1) * $numOfrecs;
 
-        if(empty($_POST['search'])){
+        if(empty($_POST['search']) && empty($_COOKIE['search'])){
             $pdostat = $pdo -> prepare("SELECT * FROM products ORDER BY pro_id DESC");
             $pdostat -> execute();
             $RowResult = $pdostat -> fetchAll();
@@ -92,7 +101,7 @@
             $pdostat -> execute();
             $result = $pdostat -> fetchAll();                        
         }else{
-            $searchkey = $_POST['search'];
+            $searchkey = $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
             $pdostat = $pdo -> prepare("SELECT * FROM products WHERE pro_name LIKE '%$searchkey%' ORDER BY pro_id DESC");
             $pdostat -> execute();
             $RowResult = $pdostat -> fetchAll();

@@ -18,7 +18,7 @@
             unset($_COOKIE['search']);
             setcookie('search', null, -1, '/');
         }
-    }
+    } 
 
 ?>
 

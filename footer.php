@@ -14,7 +14,7 @@
             </p>
         </div> 
     </div> 
-</footer>
+</footer> 
 <!-- End footer Area -->
 
 <script src="js/vendor/jquery-2.2.4.min.js"></script>

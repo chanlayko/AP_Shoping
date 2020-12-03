@@ -34,29 +34,39 @@
                 $imgError = "* Image cannot be Null *";
             }
         }else{
-            $imgfile = "images/".($_FILES["image"]["name"]);
-
-            $imgfileType = pathinfo($imgfile,PATHINFO_EXTENSION);
-
-            if($imgfileType != 'png' && $imgfileType != 'jpg' && $imgfileType != 'jpeg'){
-                echo "<script>alert('Image may be png ,jpg ,jpeg')</script>";
-            }else{
-                $name = $_POST['name'];
-                $desc = $_POST['desc'];
-                $qut = $_POST['qut'];
-                $price = $_POST['price'];
-                $cat = $_POST['cat'];
-                $image = $_FILES['image']['name'];
-                move_uploaded_file($_FILES['image']['tmp_name'],$imgfile);
-
-                $pdostat = $pdo -> prepare("INSERT INTO products(pro_name,pro_description,pro_price,pro_quarlity,pro_category_id,pro_image) VALUES (:name,:desc,:price,:qut,:cat,:img)");
-                $result = $pdostat -> execute(
-                    array(':name'=>$name,':desc'=>$desc,':price'=>$price,':qut'=>$qut,':cat'=>$cat,':img'=>$image)
-                );
-                if($result){
-                    echo "<script>alert('Sussessfully Create Products Adding');window.location.href='product.php';</script>";
-                }
+            if(is_numeric($_POST['qut'] != 1)){
+                $qutError = "Quantity should be integer value";
             }
+            if(is_numeric($_POST['price'] != 1)){
+                $priceError = "Price should be integer value";
+            }
+            if($qutError == '' && $priceError == ''){
+                $imgfile = "images/".($_FILES["image"]["name"]);
+
+                $imgfileType = pathinfo($imgfile,PATHINFO_EXTENSION);
+
+                if($imgfileType != 'png' && $imgfileType != 'jpg' && $imgfileType != 'jpeg'){
+                    echo "<script>alert('Image may be png ,jpg ,jpeg')</script>";
+                }else{
+                    $name = $_POST['name'];
+                    $desc = $_POST['desc'];
+                    $qut = $_POST['qut'];
+                    $price = $_POST['price'];
+                    $cat = $_POST['cat'];
+                    $image = $_FILES['image']['name'];
+                    move_uploaded_file($_FILES['image']['tmp_name'],$imgfile);
+
+                    $pdostat = $pdo -> prepare("INSERT INTO products(pro_name,pro_description,pro_price,pro_quarlity,pro_category_id,pro_image) VALUES (:name,:desc,:price,:qut,:cat,:img)");
+                    $result = $pdostat -> execute(
+                        array(':name'=>$name,':desc'=>$desc,':price'=>$price,':qut'=>$qut,':cat'=>$cat,':img'=>$image)
+                    );
+                    if($result){
+                        echo "<script>alert('Sussessfully Create Products Adding');window.location.href='product.php';</script>";
+                    }
+                }  
+            }
+            
+            
         }
     }
 

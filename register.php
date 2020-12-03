@@ -61,7 +61,7 @@
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav ml-auto">
-							<li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+							<li class="nav-item active"><a class="nav-link" href="index.php">Home</a></li>
 							<li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false">categories</a>
@@ -91,7 +91,16 @@
 							<li class="nav-item active"><a class="nav-link" href="register.php">registration</a></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
+						    <?php
+                                $cart = 0;
+                                if(isset($_SESSION['cart'])){
+                                    foreach ($_SESSION['cart'] as $key => $qty){
+                                        $cart += $qty;
+                                    }
+                                }
+                            
+                            ?>
+							<li class="nav-item"><a href="cart.php" class="cart"><span class="ti-bag"> <?php echo $cart; ?> </span></a></li>
 							<li class="nav-item">
 								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
 							</li>
@@ -100,7 +109,15 @@
 				</div>
 			</nav>
 		</div>
-<?php include_once "search_nav.php" ?>
+		<div class="search_input" id="search_input_box">
+			<div class="container">
+				<form class="d-flex justify-content-between">
+					<input type="text" class="form-control" id="search_input" placeholder="Search Here">
+					<button type="submit" class="btn"></button>
+					<span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
+				</form>
+			</div>
+		</div>
 	</header>
 	<!-- End Header Area -->
 

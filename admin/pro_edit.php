@@ -23,7 +23,7 @@
             if(empty($_POST['qut'])){
                 $qutError = "* Quantity cannot be Null *";
             }elseif(is_numeric($_POST['qut']) != 1){
-                $qutError = "* Quantity should be int value";
+                $qutError = "* Quantity should be int value"; 
             }
             if(empty($_POST['price'])){
                 $priceError = "* Price cannot be Null *";
@@ -34,43 +34,52 @@
                 $imgError = "* Image cannot be Null *";
             }
         }else{
-            if($_FILES['image']['name'] != null){
-                $imgfile = "images/".($_FILES["image"]["name"]);
-                $imgfileType = pathinfo($imgfile,PATHINFO_EXTENSION);
+            if(is_numeric($_POST['qut'] != 1)){
+                $qutError = "Quantity should be integer value";
+            }
+            if(is_numeric($_POST['price'] != 1)){
+                $priceError = "Price should be integer value";
+            }
+            if($qutError == '' && $priceError == ''){
+                
+                if($_FILES['image']['name'] != null){
+                    $imgfile = "images/".($_FILES["image"]["name"]);
+                    $imgfileType = pathinfo($imgfile,PATHINFO_EXTENSION);
 
-                if($imgfileType != 'png' && $imgfileType != 'jpg' && $imgfileType != 'JPG' && $imgfileType != 'jpeg'){
-                    echo "<script>alert('Image may be png ,jpg ,JPG ,jpeg')</script>";
+                    if($imgfileType != 'png' && $imgfileType != 'jpg' && $imgfileType != 'JPG' && $imgfileType != 'jpeg'){
+                        echo "<script>alert('Image may be png ,jpg ,JPG ,jpeg')</script>";
+                    }else{
+                        $name = $_POST['name'];
+                        $desc = $_POST['desc'];
+                        $qut = $_POST['qut'];
+                        $price = $_POST['price'];
+                        $cat = $_POST['cat'];
+                        $image = $_FILES['image']['name'];
+                        move_uploaded_file($_FILES['image']['tmp_name'],$imgfile);
+
+                        $pdostat = $pdo -> prepare("UPDATE products SET pro_name=:name,pro_description=:desc,pro_price=:price,pro_quarlity=:qut,pro_category_id=:cat,pro_image=:img WHERE pro_id=".$_GET['id']);
+                        $result = $pdostat -> execute(
+                            array(':name'=>$name,':desc'=>$desc,':price'=>$price,':qut'=>$qut,':cat'=>$cat,':img'=>$image)
+                        );
+                        if($result){
+                            echo "<script>alert('Sussessfully Create Products Adding');window.location.href='product.php';</script>";
+                        }
+                    }
                 }else{
+
                     $name = $_POST['name'];
                     $desc = $_POST['desc'];
                     $qut = $_POST['qut'];
                     $price = $_POST['price'];
                     $cat = $_POST['cat'];
-                    $image = $_FILES['image']['name'];
-                    move_uploaded_file($_FILES['image']['tmp_name'],$imgfile);
 
-                    $pdostat = $pdo -> prepare("UPDATE products SET pro_name=:name,pro_description=:desc,pro_price=:price,pro_quarlity=:qut,pro_category_id=:cat,pro_image=:img WHERE pro_id=".$_GET['id']);
-                    $result = $pdostat -> execute(
-                        array(':name'=>$name,':desc'=>$desc,':price'=>$price,':qut'=>$qut,':cat'=>$cat,':img'=>$image)
-                    );
+                     $pdostat = $pdo -> prepare("UPDATE products SET pro_name=:name,pro_description=:desc,pro_price=:price,pro_quarlity=:qut,pro_category_id=:cat WHERE pro_id=".$_GET['id']);
+                        $result = $pdostat -> execute(
+                            array(':name'=>$name,':desc'=>$desc,':price'=>$price,':qut'=>$qut,':cat'=>$cat)
+                        );
                     if($result){
                         echo "<script>alert('Sussessfully Create Products Adding');window.location.href='product.php';</script>";
                     }
-                }
-            }else{
-                
-                $name = $_POST['name'];
-                $desc = $_POST['desc'];
-                $qut = $_POST['qut'];
-                $price = $_POST['price'];
-                $cat = $_POST['cat'];
-
-                 $pdostat = $pdo -> prepare("UPDATE products SET pro_name=:name,pro_description=:desc,pro_price=:price,pro_quarlity=:qut,pro_category_id=:cat WHERE pro_id=".$_GET['id']);
-                    $result = $pdostat -> execute(
-                        array(':name'=>$name,':desc'=>$desc,':price'=>$price,':qut'=>$qut,':cat'=>$cat)
-                    );
-                if($result){
-                    echo "<script>alert('Sussessfully Create Products Adding');window.location.href='product.php';</script>";
                 }
             }
         }

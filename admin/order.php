@@ -34,7 +34,7 @@
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
-    </div>
+    </div>   
     <!-- /.content-header -->
 
     <!-- Main content -->

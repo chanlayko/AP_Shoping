@@ -13,7 +13,7 @@
 	<header class="header_area sticky-header">
 		<div class="main_menu">
 			<nav class="navbar navbar-expand-lg navbar-light main_box">
-				<div class="container"> 
+				<div class="container">
 					<!-- Brand and toggle get grouped for better mobile display -->
 					<a class="navbar-brand logo_h" href="index.php"><h2>AP Shoping</h2></a>
 					
@@ -24,20 +24,19 @@
 							<li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false">categories</a>
-                                    <ul class="dropdown-menu">
+								<ul class="dropdown-menu">
                                          <?php 
                                             $stat = $pdo -> prepare("SELECT * FROM categories");
                                             $stat -> execute();
                                             $result = $stat -> fetchAll();
 
-                                            foreach($result as $value){ 
+                                            foreach($result as $value){
                                         ?>
                                                 <li class="nav-item"><a class="nav-link" href="categories.php?id=<?php echo escape($value['id']) ?>"><?php echo escape($value['cat_name']); ?></a></li>
                                         <?php
                                             }
                                         ?>
                                     </ul>
-								
 							</li>
 							<li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -45,13 +44,23 @@
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
 									<li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
+									<li class="nav-item"><a href="logout.php" class="nav-link">Log Out</a></li>
 								</ul>
 							</li>
 							<li class="nav-item"><a class="nav-link" href="login.php">log in</a></li>
 							<li class="nav-item"><a class="nav-link" href="register.php">registration</a></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
+						    <?php
+                                $cart = 0;
+                                if(isset($_SESSION['cart'])){
+                                    foreach ($_SESSION['cart'] as $key => $qty){
+                                        $cart += $qty;
+                                    }
+                                }
+                            
+                            ?>
+							<li class="nav-item"><a href="cart.php" class="cart"><span class="ti-bag"> <?php echo $cart; ?> </span></a></li>
 							<li class="nav-item">
 								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
 							</li>
@@ -60,7 +69,15 @@
 				</div>
 			</nav>
 		</div>
-<?php include_once "search_nav.php" ?>
+		<div class="search_input" id="search_input_box">
+			<div class="container">
+				<form class="d-flex justify-content-between">
+					<input type="text" class="form-control" id="search_input" placeholder="Search Here">
+					<button type="submit" class="btn"></button>
+					<span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
+				</form>
+			</div>
+		</div>
 	</header>
 	<!-- End Header Area -->
 
@@ -92,22 +109,22 @@
         $offset = ($pageno - 1) * $numOfrecs;
 
         if(empty($_POST['search']) && empty($_COOKIE['search'])){
-            $pdostat = $pdo -> prepare("SELECT * FROM products ORDER BY pro_id DESC");
+            $pdostat = $pdo -> prepare("SELECT * FROM products WHERE pro_quarlity > 0 ORDER BY pro_id DESC");
             $pdostat -> execute();
             $RowResult = $pdostat -> fetchAll();
             $total_pages = ceil(count($RowResult) / $numOfrecs);
 
-            $pdostat = $pdo -> prepare("SELECT * FROM products ORDER BY pro_id DESC LIMIT $offset,$numOfrecs");
+            $pdostat = $pdo -> prepare("SELECT * FROM products WHERE pro_quarlity > 0 ORDER BY pro_id DESC LIMIT $offset,$numOfrecs");
             $pdostat -> execute();
             $result = $pdostat -> fetchAll();                        
         }else{
             $searchkey = $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
-            $pdostat = $pdo -> prepare("SELECT * FROM products WHERE pro_name LIKE '%$searchkey%' ORDER BY pro_id DESC");
+            $pdostat = $pdo -> prepare("SELECT * FROM products WHERE pro_name LIKE '%$searchkey%' AND pro_quarlity > 0 ORDER BY pro_id DESC");
             $pdostat -> execute();
             $RowResult = $pdostat -> fetchAll();
             $total_pages = ceil(count($RowResult) / $numOfrecs);
 
-            $pdostat = $pdo -> prepare("SELECT * FROM products WHERE pro_name LIKE '%$searchkey%' ORDER BY pro_id DESC LIMIT $offset,$numOfrecs");
+            $pdostat = $pdo -> prepare("SELECT * FROM products WHERE pro_name LIKE '%$searchkey%' AND pro_quarlity > 0 ORDER BY pro_id DESC LIMIT $offset,$numOfrecs");
             $pdostat -> execute();
             $result = $pdostat -> fetchAll();
         }                 
@@ -145,15 +162,20 @@
                                         <h6 class="l-through">$210.00</h6>
                                     </div>
                                     <div class="prd-bottom">
-
-                                        <a href="" class="social-info">
-                                            <span class="ti-bag"></span>
-                                            <p class="hover-text">add to bag</p>
-                                        </a>
-                                        <a href="view_detail.php?id=<?php echo escape($value['pro_id']) ?>" class="social-info">
-                                            <span class="lnr lnr-move"></span>
-                                            <p class="hover-text">view more</p>
-                                        </a>
+                                       <form action="addtocart.php" method="post">
+                                          <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+                                          <input type="hidden" name="id" value="<?php echo escape($value['pro_id']); ?>">
+                                          <input type="hidden" name="qty" value="1">
+                                           <div class="social-info">
+                                               <button type="submit" name="submit" class="social-info" style="display:contents;">
+                                                   <span class="ti-bag"></span><p class="hover-text" style="left:20px;">Add to Bag</p>
+                                               </button>
+                                           </div>
+                                            <a href="view_detail.php?id=<?php echo escape($value['pro_id']) ?>" class="social-info">
+                                                <span class="lnr lnr-move"></span>
+                                                <p class="hover-text">view more</p>
+                                            </a>
+                                       </form>
                                     </div>
                                 </div>
 							</div>

@@ -41,7 +41,16 @@
 							<li class="nav-item"><a class="nav-link" href="register.php">registration</a></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
+						    <?php
+                                $cart = 0;
+                                if(isset($_SESSION['cart'])){
+                                    foreach ($_SESSION['cart'] as $key => $qty){
+                                        $cart += $qty;
+                                    }
+                                }
+                            
+                            ?>
+							<li class="nav-item"><a href="cart.php" class="cart"><span class="ti-bag"> <?php echo $cart; ?> </span></a></li>
 							<li class="nav-item">
 								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
 							</li>
@@ -75,8 +84,6 @@
                             $stat = $pdo -> prepare("SELECT * FROM products WHERE pro_id=".$_GET['id']);
                             $stat -> execute();
                             $result = $stat -> fetch(PDO::FETCH_ASSOC);
-                            
-                            
                         ?>	
 						<a href="#"><?php echo escape($result['pro_name']) ?></a>
 					</nav>
@@ -89,7 +96,8 @@
 	<!--================Single Product Area =================-->
 	<div class="product_image_area">
 		<div class="container">
-        <?php 
+
+        <?php
             $stat = $pdo -> prepare("SELECT * FROM products WHERE pro_id=".$_GET['id']);
             $stat -> execute();
             $result = $stat -> fetchAll();
@@ -98,10 +106,7 @@
         ?>		
 			<div class="row s_product_inner">
 				<div class="col-lg-6">
-					<div class="s_Product_carousel">                    
-					    <div class="single-prd-item">
-                            <img class="img-fluid" src="admin/images/<?php echo escape($value['pro_image']); ?>" alt="">
-                        </div>
+					<div class="">                    
                         <div class="single-prd-item">
                             <img class="img-fluid" src="admin/images/<?php echo escape($value['pro_image']); ?>" alt="">
                         </div>
@@ -121,19 +126,23 @@
 							<li><a href="#"><span>Availibility</span> : In Stock</a></li>
 						</ul>
 						<p><?php echo escape($value['pro_description']) ?></p>
-						<div class="product_count">
-							<label for="qty">Quantity:</label>
+						<form action="addtocart.php" method="post">
+                            <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+                            <input type="hidden" name="id" value="<?php echo escape($value['pro_id']); ?>">
+						    <div class="product_count">
+							<label for="qty">Quantity:</label> 
 							<input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
 							<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
 							 class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
 							<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
 							 class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-						</div>
-						<div class="card_area d-flex align-items-center">
-							<a class="primary-btn" href="#">Add to Cart</a>
-							<a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
-							<a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
-						</div>
+                            </div>
+                            <div class="card_area d-flex align-items-center">
+                                <button class="primary-btn" href="addtocart.php" style="border:1px solid">Add to Cart</button>
+                                <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
+                                <a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
+                            </div>
+						</form>
 					</div>
                     
 				</div>

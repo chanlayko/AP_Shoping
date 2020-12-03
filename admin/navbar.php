@@ -111,6 +111,41 @@
               <p>Order</p>
             </a>
           </li>
+          <li class="nav-item has-treeview menu">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Reprot
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="weekly_reprot.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Weekly Reprot</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="monthly_report.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Monthly Reprot</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="royal_customer.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Royal Customer</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="best_saller_item.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Best Saller Item</p>
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
